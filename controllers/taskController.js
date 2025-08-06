@@ -5,11 +5,9 @@ const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
     if (!tasks || tasks.length === 0) {
-      res
-        .status(404)
-        .json({
-          message: `Aucune donnée n'a encore enregistré dans la base de données`,
-        });
+      res.status(404).json({
+        message: `Aucune donnée n'a encore enregistré dans la base de données`,
+      });
     }
     return res.json(tasks);
   } catch (err) {
