@@ -4,6 +4,7 @@ const connectDB = require('./models/db');
 const router = require('./routes/taskRoutes');
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
+const userRoute = require('./routes/userRoute');
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/tasks', router);
+app.use('/api/users', userRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`Serveur en cours sur le port ${process.env.PORT}`);
