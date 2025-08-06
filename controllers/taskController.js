@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().populate('assignedTo','name email -_id').lean();
     if (!tasks || tasks.length === 0) {
       res.status(404).json({
         message: `Aucune donnée n'a encore enregistré dans la base de données`,
@@ -17,8 +17,12 @@ const getAllTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
   try {
+      const { title, description, assignedTo } = req.body;
+
     const task = new Task({
-      title: req.body.title,
+      title,
+        description,
+        assignedTo,
     });
     const newTask = await task.save();
     res.status(201).json(newTask);
