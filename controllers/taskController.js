@@ -1,4 +1,4 @@
-const Task = require('../models/task');
+const Task = require('../models/TaskModel');
 const mongoose = require('mongoose');
 
 const getAllTasks = async (req, res) => {
@@ -35,13 +35,11 @@ const getTaskById = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404);
-      throw new Error(`ID de tache non valide`);
+      res.status(404).json({error : `ID de tache non valide`});
     }
     const task = await Task.findById(id);
     if (!task) {
-      res.status(404);
-      throw new Error(`Tache non trouvée`);
+      res.status(404).json({error : `Tache non trouvée`});
     }
     return res.json(task);
   } catch (err) {
