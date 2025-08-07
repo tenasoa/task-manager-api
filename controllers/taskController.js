@@ -106,4 +106,5 @@ module.exports = {
   getTaskById,
   updateTask,
   deleteTask,
+    getTaskIndexes,
 };
