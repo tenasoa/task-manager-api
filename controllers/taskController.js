@@ -91,6 +91,15 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+const getTaskIndexes = async (req, res) => {
+    try {
+        const indexes = await Task.collection.indexes();
+        res.json(indexes);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
 module.exports = {
   getAllTasks,
   createTask,
