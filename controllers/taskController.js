@@ -37,7 +37,7 @@ const getTaskById = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({error : `ID de tache non valide`});
     }
-    const task = await Task.findById(id);
+    const task = await Task.findById(id).populate('assignedTo','name email -_id').lean();
     if (!task) {
       res.status(404).json({error : `Tache non trouvée`});
     }
