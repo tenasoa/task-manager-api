@@ -4,6 +4,7 @@ const taskSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'Le titre est obligatoire'],
+      index : true,
     minLength:[5, 'Le titre ait au moins 5 caractères'],
     trim: true,
       validate: {
