@@ -3,6 +3,7 @@ const router = express.Router();
 const taskController = require('../controllers/taskController');
 const validateTask = require('../middleware/validateTask');
 const auth = require('../middleware/auth');
+const { getTaskIndexes } = require('../controllers/taskController');
 
 router.use(auth);
 router.get('/', taskController.getAllTasks);
