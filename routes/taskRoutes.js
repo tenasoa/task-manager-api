@@ -7,6 +7,9 @@ const { getTaskIndexes } = require('../controllers/taskController');
 
 router.use(auth);
 router.get('/', taskController.getAllTasks);
+
+router.get('/indexes', getTaskIndexes);
+
 router.get('/:id', taskController.getTaskById);
 router.post('/', validateTask, taskController.createTask);
 router.put('/:id', taskController.updateTask);
