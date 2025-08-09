@@ -4,12 +4,13 @@ const taskSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'Le titre est obligatoire'],
+      index : true,
     minLength:[5, 'Le titre ait au moins 5 caractères'],
     trim: true,
-      validate: {
-        validator: (value) => !/\d/.test(value),
-        message: 'Le titre ne peut pas contenir de chiffres',
-      }
+      // validate: {
+      // validator: (value) => !/\d/.test(value),
+       // message: 'Le titre ne peut pas contenir de chiffres',
+     // }
   },
   description: {
     type: String,
@@ -22,6 +23,7 @@ const taskSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false,
+      index: true
   },
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
@@ -36,5 +38,7 @@ const taskSchema = new mongoose.Schema({
     {
         timestamps: true,
     });
+
+taskSchema.index({ completed: 1, title: 1 });
 
 module.exports = mongoose.models.Task || mongoose.model('Task', taskSchema);

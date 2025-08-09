@@ -1,6 +1,5 @@
 const Task = require('../models/TaskModel');
 const mongoose = require('mongoose');
-const User = require("../models/UserModel");
 
 const getAllTasks = async (req, res) => {
   try {
@@ -91,10 +90,68 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+const getTaskIndexes = async (req, res) => {
+    try {
+        const indexes = await Task.collection.indexes();
+        res.json(indexes);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+const getStatsByUser = async (req, res) => {
+    try {
+        const stats = await Task.aggregate([
+            {
+                $group: {
+                    _id: "$assignedTo",
+                    count: { $sum: 1 },
+                    completedCount: {
+                        $sum: { $cond: [{ $eq: ["$completed", true] }, 1, 0] }
+                    },
+                    pendingCount: {
+                        $sum: { $cond: [{ $eq: ["$completed", false] }, 1, 0] }
+                    }
+                }
+
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: "$user.name",
+                    email: "$user.email",
+                    count: 1,
+                    completedCount: 1,
+                    pendingCount: 1
+                }
+            },
+            {
+                $sort : { completedCount : -1 }
+            }
+        ]);
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
 module.exports = {
   getAllTasks,
   createTask,
   getTaskById,
   updateTask,
   deleteTask,
+    getTaskIndexes,
+    getStatsByUser,
 };
