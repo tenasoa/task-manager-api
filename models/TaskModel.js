@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {formatTitle, logCreation} = require("../middleware/task.middleware");
 
 const taskSchema = new mongoose.Schema({
   title: {
@@ -38,6 +39,10 @@ const taskSchema = new mongoose.Schema({
     {
         timestamps: true,
     });
+
+// Middleware POST save: log création tâche
+taskSchema.pre('save', formatTitle);
+taskSchema.post('save', logCreation);
 
 taskSchema.index({ completed: 1, title: 1 });
 

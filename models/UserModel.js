@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const {formatTitle} = require("../middleware/task.middleware");
+const {formatName, logUserCreation} = require("../middleware/user.middleware");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,5 +30,9 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Middleware pre save: formater le nom
+userSchema.pre('save', formatName);
+userSchema.post('save', logUserCreation);
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);
