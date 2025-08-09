@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController');
+const taskController = require('../controllers/task.controller');
 const validateTask = require('../middleware/validateTask');
-const { getTaskIndexes, getStatsByUser} = require('../controllers/taskController');
+const { getTaskIndexes, getStatsByUser} = require('../controllers/task.controller');
 
 
 router.get('/', taskController.getAllTasks);
