@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./models/db');
-const router = require('./routes/taskRoutes');
+const taskRouter = require('./routes/taskRoutes');
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 const userRoute = require('./routes/userRoute');
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.send('API Task Manager est en ligne 🚀');
 });
 
-app.use('/api/tasks', router);
+app.use('/api/tasks', taskRouter);
 app.use('/api/users', userRoute);
 
 app.listen(process.env.PORT, () => {
