@@ -1,11 +1,11 @@
 const User = require('../models/user.model');
-const userRepository = require('../repositories/user.repository');
+const userService = require('../services/user.service');
 
 // créer un utilisateur
 exports.createUser = async (req, res) => {
   try {
    // const user = new User(req.body);
-    const savedUser = await userRepository.create(req.body);
+    const savedUser = await userService.createUser(req.body);
     res.status(200).json(savedUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -15,7 +15,7 @@ exports.createUser = async (req, res) => {
 // Récuperer tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await userRepository.findAll();
+    const users = await userService.getAllUsers();
     if (users.length === 0) {
       return res.status(404).json({ message: 'La collection est vide' });
     }
@@ -29,7 +29,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await userRepository.findById(id);
+    const user = await userService.getUserById(id);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,7 +40,7 @@ exports.getUserById = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await userRepository.update(id, req.body);
+    const user = await userService.updateUserById(id, req.body);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -51,7 +51,7 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await userRepository.delete(id);
+    const user = await userService.deleteUser(id);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
