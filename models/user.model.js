@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
       type: String,
         required: [true, "Le mot de passe est obligatoire"],
     },
+    role: {
+      type: String,
+        required: [true, 'La définition de votre role est obligatoire'],
+    },
   age: {
     type: Number,
     min: [0, 'Age minimum: 0'],
