@@ -7,20 +7,20 @@ class UserRepository {
     }
 
     async findById(id) {
-        return await User.findById(id);
+        return User.findById(id);
     }
 
      async findAll(filters = {}, options = {}) {
         const { skip = 0, limit = 10, sort = { createdAt: -1} } = options;
-        return await User.find(filters).skip(skip).limit(limit).sort(sort);
+        return User.find(filters).skip(skip).limit(limit).sort(sort);
     }
 
     async updateBydId(id, updateData) {
-        return await User.findByIdAndUpdate(id, updateData, { new: true });
+        return User.findByIdAndUpdate(id, updateData, { new: true });
     }
 
     async delete(id) {
-        return await User.findByIdAndDelete(id);
+        return User.findByIdAndDelete(id);
     }
 }
 

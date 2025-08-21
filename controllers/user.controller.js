@@ -1,5 +1,7 @@
 const User = require('../models/user.model');
 const userService = require('../services/user.service');
+const UserDto = require('../dtos/user.dto');
+const {parse} = require("dotenv");
 
 // créer un utilisateur
 exports.createUser = async (req, res) => {
@@ -15,7 +17,13 @@ exports.createUser = async (req, res) => {
 // Récuperer tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await userService.getAllUsers();
+    const { page = 1, limit = 10, sort, ...filters } = req.query;
+    const options = {
+        skip: (parseInt(page) - 1) * parseInt(limit),
+        limit: parseInt(limit),
+        sort: sort ? {[sort]:1} : { createdAt: -1 },
+    };
+    const users = await userService.getAllUsers(filters, options);
     if (users.length === 0) {
       return res.status(404).json({ message: 'La collection est vide' });
     }
