@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const {formatTitle} = require("../middleware/task.middleware");
 const {formatName, logUserCreation} = require("../middleware/user.middleware");
 
@@ -20,6 +21,10 @@ const userSchema = new mongoose.Schema({
       "L'email n'est pas valide",
     ],
   },
+    password: {
+      type: String,
+        required: [true, "Le mot de passe est obligatoire"],
+    },
   age: {
     type: Number,
     min: [0, 'Age minimum: 0'],
@@ -32,7 +37,19 @@ const userSchema = new mongoose.Schema({
 });
 
 // Middleware pre save: formater le nom
-userSchema.pre('save', formatName);
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
+    }
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 userSchema.post('save', logUserCreation);
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);
